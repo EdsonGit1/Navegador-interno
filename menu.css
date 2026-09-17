@@ -1,0 +1,24 @@
+.destination-menu h2 { margin: 4px 0 14px; font-size: 1.45rem; }
+.destination-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.destination-option { min-height: 112px; padding: 14px; text-align: left; border: 1px solid #cbdde3; border-radius: 17px; background: #fff; color: var(--ink); cursor: pointer; transition: .18s ease; }
+.destination-option span { display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 9px; border-radius: 10px; background: #e0f2fe; color: #0369a1; font-size: .72rem; font-weight: 900; }
+.destination-option strong, .destination-option small { display: block; }
+.destination-option strong { font-size: .9rem; line-height: 1.18; }
+.destination-option small { margin-top: 4px; color: #607d87; font-size: .72rem; }
+.destination-option.selected { border: 2px solid var(--blue2); background: #f0f9ff; box-shadow: 0 8px 22px rgba(14,165,233,.13); }
+.destination-option.pending { opacity: .62; cursor: not-allowed; }
+.origin-card { margin-bottom: 20px; padding: 16px; border-radius: 18px; background: #082f49; color: white; }
+.origin-card span, .origin-card strong { display: block; }
+.origin-card span { color: #bae6fd; font-size: .75rem; }
+.origin-card strong { margin: 3px 0 12px; font-size: 1.15rem; }
+.origin-card label { display: block; margin-bottom: 5px; color: #bae6fd; font-size: .72rem; }
+.origin-card select { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid #7dd3fc; border-radius: 11px; background: white; color: #082f49; font: inherit; font-weight: 700; }
+.ar-arrow.left.visible { animation: none; transform: translate(-50%,-50%) rotate(-90deg); }
+.ar-arrow.right.visible { animation: none; transform: translate(-50%,-50%) rotate(90deg); }
+.back-button { display: inline-flex; min-height: 44px; align-items: center; margin: 0 0 16px; padding: 0; border: 0; background: transparent; color: var(--blue); font: inherit; font-weight: 800; cursor: pointer; }
+.route-view { min-height: calc(100vh - 80px); }
+.action-row { grid-template-columns: 1fr; }
+.action-row:has(.primary-button:not([hidden])) { grid-template-columns: 1fr 1fr; }
+.automatic-note { margin: 12px 0 0 !important; color: #9fc7d3 !important; font-size: .78rem !important; line-height: 1.4; }
+.camera-status-group { display: grid; justify-items: center; gap: 6px; }
+.voice-pill { padding: 5px 9px; border-radius: 999px; background: rgba(3,19,26,.66); color: #bae6fd; font-size: .72rem; font-weight: 800; }

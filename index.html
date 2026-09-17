@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#075985">
+  <title>Navega Hospital</title>
+  <meta name="description" content="MVP de navegação hospitalar com reconhecimento visual e realidade aumentada.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">NH</div>
+      <div>
+        <p class="eyebrow">NAVEGAÇÃO ASSISTIDA</p>
+        <h1>Navega Hospital</h1>
+      </div>
+      <button id="helpBtn" class="icon-button" aria-label="Como usar">?</button>
+    </header>
+
+    <section id="setupView" class="view setup-view">
+      <div class="origin-card">
+        <div><span>Local identificado pelo QR Code</span><strong id="originName">Entrada de Serviço</strong></div>
+        <label for="originSelect">Selecione o local de acesso</label>
+        <select id="originSelect">
+          <option value="entrada-servico">Entrada de Serviço</option>
+          <option value="entrada-pacientes">Entrada de Pacientes</option>
+          <option value="entrada-administrativa-superintendencia">Entrada Administrativa da Superintendência</option>
+          <option value="fundos-caixa-dagua">Fundos/Caixa d’Água — QR no Almoxarifado</option>
+        </select>
+      </div>
+      <div class="destination-menu">
+        <p class="eyebrow">PARA ONDE VOCÊ VAI?</p>
+        <h2>Escolha seu destino</h2>
+        <div id="destinationGrid" class="destination-grid">
+          <button class="destination-option selected" data-destination="engenharia"><span>EC</span><strong>Engenharia Clínica</strong><small>Rota disponível</small></button>
+          <button class="destination-option" data-destination="manutencao"><span>MP</span><strong>Manutenção Predial</strong><small>Rota disponível</small></button>
+          <button class="destination-option" data-destination="farmacia"><span>+</span><strong>Farmácia</strong><small>Rota disponível</small></button>
+          <button class="destination-option" data-destination="cme"><span>CME</span><strong>CME</strong><small>Rota disponível</small></button>
+          <button class="destination-option" data-destination="achados"><span>AP</span><strong>Achados e Perdidos</strong><small>Rota disponível</small></button>
+          <button class="destination-option" data-destination="almoxarifado"><span>AL</span><strong>Almoxarifado</strong><small>Rota disponível</small></button>
+          <button class="destination-option" data-destination="nutricao"><span>NU</span><strong>Nutrição</strong><small>Rota disponível</small></button>
+          <button class="destination-option" data-destination="hotelaria"><span>SH</span><strong>Serviço de Hotelaria</strong><small>Rota disponível</small></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="routeView" class="view route-view" hidden>
+      <button id="backToMenuBtn" class="back-button" type="button">← Voltar aos destinos</button>
+      <div class="destination-card">
+        <div id="selectedIcon" class="destination-icon" aria-hidden="true">+</div>
+        <div><span>Destino selecionado</span><strong id="selectedName">Farmácia</strong><small id="selectedMeta">Térreo · rota com 6 pontos</small></div>
+      </div>
+
+      <div class="route-preview" aria-label="Resumo da rota">
+        <h2>Sua rota</h2>
+        <ol id="routeList" class="route-list"></ol>
+      </div>
+
+      <button id="startBtn" class="primary-button">Iniciar navegação</button>
+      <p class="privacy-note">A câmera é processada neste aparelho. Nenhuma imagem é enviada.</p>
+    </section>
+
+    <section id="cameraView" class="view camera-view" hidden>
+      <video id="camera" autoplay playsinline muted></video>
+      <img id="fallbackImage" alt="Imagem de referência do ponto atual">
+      <canvas id="analysisCanvas" hidden></canvas>
+
+      <div class="camera-shade"></div>
+      <div class="camera-header">
+        <button id="closeBtn" class="round-button" aria-label="Encerrar navegação">×</button>
+        <div class="camera-status-group">
+          <div class="progress-pill"><span id="stepCount">1 de 6</span></div>
+          <div class="voice-pill" aria-live="polite">🔊 Voz ativa</div>
+        </div>
+        <button id="flashBtn" class="round-button" aria-label="Alternar lanterna">☼</button>
+      </div>
+
+      <div id="scanFrame" class="scan-frame" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div id="arArrow" class="ar-arrow" aria-hidden="true">
+        <div class="arrow-head"></div>
+        <div class="arrow-stem"></div>
+      </div>
+
+      <div class="instruction-panel">
+        <div class="confidence-row">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="recognitionStatus">Reconhecimento automático ativo…</span>
+          <strong id="confidence"></strong>
+        </div>
+        <h2 id="instruction">Aponte a câmera para a entrada</h2>
+        <p id="locationLabel">Entrada dos pacientes</p>
+        <div class="action-row">
+          <button id="referenceBtn" class="secondary-button">Ver referência</button>
+          <button id="confirmBtn" class="primary-button compact" hidden>Avançar manualmente</button>
+        </div>
+        <p class="automatic-note">Aponte a câmera para o ambiente. O aplicativo localizará o ponto e seguirá a rota automaticamente.</p>
+      </div>
+    </section>
+
+    <dialog id="helpDialog">
+      <button class="dialog-close" aria-label="Fechar">×</button>
+      <h2>Como usar</h2>
+      <p>Aponte a câmera para os pontos marcantes do caminho. O aplicativo reconhece o local, apresenta a direção e avança automaticamente.</p>
+      <p>As orientações são faladas e reforçadas por vibração. Entre os pontos de decisão, você pode guardar o celular e retirá-lo quando ouvir o lembrete.</p>
+      <p>Este MVP compara características visuais da câmera com as fotos cadastradas. Mudanças fortes de luz e ângulo podem reduzir a precisão.</p>
+    </dialog>
+
+    <dialog id="referenceDialog">
+      <button class="dialog-close" aria-label="Fechar">×</button>
+      <h2 id="referenceTitle">Imagem de referência</h2>
+      <img id="referencePhoto" alt="Ponto visual cadastrado">
+      <p id="referenceHint"></p>
+    </dialog>
+
+    <section id="arrivalView" class="view arrival-view" hidden>
+      <div class="success-icon">✓</div>
+      <p class="eyebrow">DESTINO ALCANÇADO</p>
+      <h2 id="arrivalTitle">Você chegou à Farmácia</h2>
+      <p id="arrivalText">O balcão da Farmácia foi reconhecido. O percurso está concluído.</p>
+      <button id="restartBtn" class="primary-button">Voltar ao início</button>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
